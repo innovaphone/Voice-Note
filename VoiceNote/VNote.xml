@@ -16,12 +16,18 @@
 	  <switch var="$error">
             <case not-equal="0">
                 <store-mkdir root="vm_files/" name="$cn"/>
-            </case>
+	            </case>
         </switch>
 	  <store-get root="" name="beep.$coder" out-url="$ctrl" />
         <pbx-prompt url="$ctrl"/>
 		  <lib-strcat string="vm_files/" string2="$cn" out-string="$myFile" />
-        <store-getnew root="$myFile" ext="-sip=VoiceNote&amp;dn=VoiceNote.g711a" out-url="$res"/> 
+		  <lib-strcat out-string="$res" string="-cgpn=" string2="$cgpn"/>
+		  		  <lib-strcat out-string="$res" string="$res" string2="&amp;sip="/>
+							<lib-strcat out-string="$res" string="$res" string2="$cn"/>
+								<lib-strcat out-string="$res" string="$res" string2="&amp;dn="/>
+									<lib-strcat out-string="$res" string="$res" string2="$src-dn"/>
+										<lib-strcat out-string="$res" string="$res" string2=".g711a"/>
+        <store-getnew root="$myFile" ext="$res" out-url="$res"/> 
 	  <pbx-record url="$res" sec="50"/>
 	  <pbx-disc/>
     </function>
