@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<voicemail>
+<!-- innovaphone Voice Note == innovaphone AG 2023 v01 -->
+    <function define="Main">
+        <pbx-getcallinfo out-cgpn="$cgpn" out-cdpn="$cdpn" out-leg2="$leg2" out-sip="$cn" out-dn="$src-dn"/>
+          <if notcond="$cn">
+                 <pbx-disc/>
+        </if>
+	  <store-getstat root="" name="vm_files" out-type="1" out-error="$error"/>
+	  <switch var="$error">
+            <case not-equal="0">
+                <store-mkdir root="" name="vm_files"/>
+            </case>
+        </switch>
+	  <store-getstat root="vm_files/" name="$cn" out-error="$error"/>
+	  <switch var="$error">
+            <case not-equal="0">
+                <store-mkdir root="vm_files/" name="$cn"/>
+            </case>
+        </switch>
+	  <store-get root="" name="beep.$coder" out-url="$ctrl" />
+        <pbx-prompt url="$ctrl"/>
+		  <lib-strcat string="vm_files/" string2="$cn" out-string="$myFile" />
+        <store-getnew root="$myFile" ext="-sip=VoiceNote&amp;dn=VoiceNote.g711a" out-url="$res"/> 
+	  <pbx-record url="$res" sec="50"/>
+	  <pbx-disc/>
+    </function>
+</voicemail>
